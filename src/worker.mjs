@@ -64,9 +64,9 @@ const handleOPTIONS = async () => {
   });
 };
 
-//const BASE_URL = "https://generativelanguage.googleapis.com";
-//const API_VERSION = "v1beta";
-const BASE_URL = "https://gb.131417917.xyz"
+const BASE_URL = "https://generativelanguage.googleapis.com";
+const API_VERSION = "v1beta";
+// const BASE_URL = "https://gb.131417917.xyz"
 
 // https://github.com/google-gemini/generative-ai-js/blob/cf223ff4a1ee5a2d944c53cddb8976136382bee6/src/requests/request.ts#L71
 const API_CLIENT = "genai-js/0.21.0"; // npm view @google/generative-ai version
@@ -77,7 +77,7 @@ const makeHeaders = (apiKey, more) => ({
 });
 
 async function handleModels (apiKey) {
-  const response = await fetch(`${BASE_URL}/models`, {
+  const response = await fetch(`${BASE_URL}/${API_VERSION}/models`, {
     headers: makeHeaders(apiKey),
   });
   let { body } = response;
@@ -113,7 +113,7 @@ async function handleEmbeddings (req, apiKey) {
   if (!Array.isArray(req.input)) {
     req.input = [ req.input ];
   }
-  const response = await fetch(`${BASE_URL}/${model}:batchEmbedContents`, {
+  const response = await fetch(`${BASE_URL}/${API_VERSION}/${model}:batchEmbedContents`, {
     method: "POST",
     headers: makeHeaders(apiKey, { "Content-Type": "application/json" }),
     body: JSON.stringify({
@@ -164,7 +164,7 @@ async function handleCompletions (req, apiKey) {
       body.tools.push({googleSearch: {}});
   }
   const TASK = req.stream ? "streamGenerateContent" : "generateContent";
-  let url = `${BASE_URL}/models/${model}:${TASK}`;
+  let url = `${BASE_URL}/${API_VERSION}/models/${model}:${TASK}`;
   if (req.stream) { url += "?alt=sse"; }
   const response = await fetch(url, {
     method: "POST",
